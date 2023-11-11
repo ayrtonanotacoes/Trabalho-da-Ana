@@ -3,50 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Color Converter</title>
+<title>Conversor de cor</title>
 <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 
-<h1>Color Converter</h1>
+
 
 <div id="colorInputs">
+  <h1 style="text-align: center;">Conversor de cor</h1>
   <div>
     <h2>RGB</h2>
-    <input type="number" id="rgbR" placeholder="R (0-255)" min="0" max="255">
-    <input type="number" id="rgbG" placeholder="G (0-255)" min="0" max="255">
-    <input type="number" id="rgbB" placeholder="B (0-255)" min="0" max="255">
+    <input class="inputt" type="number" id="rgbR" placeholder="R (0-255)" min="0" max="255">
+    <input class="inputt" type="number" id="rgbG" placeholder="G (0-255)" min="0" max="255">
+    <input class="inputt" type="number" id="rgbB" placeholder="B (0-255)" min="0" max="255">
   </div>
 
   <div>
     <h2>HSV</h2>
-    <input type="number" id="hsvH" placeholder="H (0-360)" min="0" max="360">
-    <input type="number" id="hsvS" placeholder="S (0-100)" min="0" max="100">
-    <input type="number" id="hsvV" placeholder="V (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="hsvH" placeholder="H (0-360)" min="0" max="360">
+    <input class="inputt" type="number" id="hsvS" placeholder="S (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="hsvV" placeholder="V (0-100)" min="0" max="100">
   </div>
 
   <div>
     <h2>HSL</h2>
-    <input type="number" id="hslH" placeholder="H (0-360)" min="0" max="360">
-    <input type="number" id="hslS" placeholder="S (0-100)" min="0" max="100">
-    <input type="number" id="hslL" placeholder="L (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="hslH" placeholder="H (0-360)" min="0" max="360">
+    <input class="inputt" type="number" id="hslS" placeholder="S (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="hslL" placeholder="L (0-100)" min="0" max="100">
   </div>
 
   <div>
     <h2>HWB</h2>
-    <input type="number" id="hwbH" placeholder="H (0-360)" min="0" max="360">
-    <input type="number" id="hwbW" placeholder="W (0-100)" min="0" max="100">
-    <input type="number" id="hwbB" placeholder="B (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="hwbH" placeholder="H (0-360)" min="0" max="360">
+    <input class="inputt" type="number" id="hwbW" placeholder="W (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="hwbB" placeholder="B (0-100)" min="0" max="100">
   </div>
 
   <div>
     <h2>CMYK</h2>
-    <input type="number" id="cmykC" placeholder="C (0-100)" min="0" max="100">
-    <input type="number" id="cmykM" placeholder="M (0-100)" min="0" max="100">
-    <input type="number" id="cmykY" placeholder="Y (0-100)" min="0" max="100">
-    <input type="number" id="cmykK" placeholder="K (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="cmykC" placeholder="C (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="cmykM" placeholder="M (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="cmykY" placeholder="Y (0-100)" min="0" max="100">
+    <input class="inputt" type="number" id="cmykK" placeholder="K (0-100)" min="0" max="100">
   </div>
+  <button class="button type1">
+    <span class="btn-txt">Voltar</span>
+  </button>
 </div>
+
 
 <script src="script.js">
 // O código JavaScript será adicionado aqui
