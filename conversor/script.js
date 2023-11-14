@@ -178,6 +178,73 @@ function hwbToRgb(h, w, b) {
     return [ r, g, b_ ];
 }
 
+function rgbToYiq(r, g, b) {
+  console.log([r,g,b])
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  const y = (0.299 * r) + (0.587 * g) + (0.114 * b);
+  const i = 0.596 * r - 0.274 * g - 0.322 * b;
+  const q = 0.211 * r - 0.523 * g + 0.312 * b;
+  console.log([y,i,q])
+  return [y, i, q];
+}
+
+function yiqToRgb(y, i, q) {
+   const r = y + 0.956 * i + 0.621 * q;
+  const g = y - 0.272 * i - 0.647 * q;
+  const b = y - 1.108 * i + 1.705 * q;
+
+  // Normalizar os valores de saída de 0 a 1 para 0 a 255
+  const clamp = (value) => Math.min(255, Math.max(0, Math.round(value * 255)));
+  
+  // Retornar os valores R, G e B normalizados
+  return [ clamp(r), clamp(g), clamp(b) ];
+}
+
+function rgbToXyz(r, g, b) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  r = r <= 0.04045 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+  g = g <= 0.04045 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+  b = b <= 0.04045 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+
+  const x = r * 0.4124564 + g * 0.3575761 + b * 0.1804375;
+  const y = r * 0.2126729 + g * 0.7151522 + b * 0.0721750;
+  const z = r * 0.0193339 + g * 0.1191920 + b * 0.9503041;
+
+  return [ x, y, z ];
+}
+
+function xyzToRgb(x, y, z) {
+  const matrix = [
+    [ 3.2404542, -1.5371385, -0.4985314],
+    [-0.9692660,  1.8760108,  0.0415560],
+    [ 0.0556434, -0.2040259,  1.0572252]
+  ];
+
+  const linearR = x * matrix[0][0] + y * matrix[0][1] + z * matrix[0][2];
+  const linearG = x * matrix[1][0] + y * matrix[1][1] + z * matrix[1][2];
+  const linearB = x * matrix[2][0] + y * matrix[2][1] + z * matrix[2][2];
+
+  const gammaCorrect = (value) => {
+    if (value <= 0.0031308) {
+      return 12.92 * value;
+    } else {
+      return 1.055 * Math.pow(value, 1 / 2.4) - 0.055;
+    }
+  };
+
+  const r = Math.max(0, Math.min(1, gammaCorrect(linearR))) * 255;
+  const g = Math.max(0, Math.min(1, gammaCorrect(linearG))) * 255;
+  const b = Math.max(0, Math.min(1, gammaCorrect(linearB))) * 255;
+
+  return [ r, g, b ];
+}
+
 function updateAllFromRGB(r, g, b, escolha)
 {
   if(escolha != 1)
@@ -218,6 +285,22 @@ function updateAllFromRGB(r, g, b, escolha)
     document.getElementById('cmykM').value = Math.round(m);
     document.getElementById('cmykY').value = Math.round(y);
     document.getElementById('cmykK').value = Math.round(k);
+  }
+
+  if(escolha != 6)
+  {
+    [y, i, q] = rgbToYiq(r, g, b);
+    document.getElementById('yiqY').value = y;
+    document.getElementById('yiqI').value = i;
+    document.getElementById('yiqQ').value = q;
+  }
+
+  if(escolha != 7)
+  {
+    [x, y, z] = rgbToXyz(r, g, b);
+    document.getElementById('xyzX').value = x;
+    document.getElementById('xyzY').value = y;
+    document.getElementById('xyzZ').value = z;
   }
 
   document.body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
@@ -277,6 +360,24 @@ function updateFromCmyk() {
   updateAllFromRGB(r,g,b,5);
 }
 
+function updateFromYiq() {
+  const y = parseFloat(document.getElementById('yiqY').value || 0);
+  const i = parseFloat(document.getElementById('yiqI').value || 0);
+  const q = parseFloat(document.getElementById('yiqQ').value || 0);
+
+  const [r, g, b] = yiqToRgb(y, i, q);
+  updateAllFromRGB(r,g,b,6);
+}
+
+function updateFromXyz() {
+  const x = parseFloat(document.getElementById('xyzX').value || 0);
+  const y = parseFloat(document.getElementById('xyzY').value || 0);
+  const z = parseFloat(document.getElementById('xyzZ').value || 0);
+
+  const [r, g, b] = xyzToRgb(x, y, z);
+  updateAllFromRGB(r,g,b,7);
+}
+
 // Adicionar event listeners aos campos de input HSV
 document.getElementById('hsvH').addEventListener('input', updateFromHsv);
 document.getElementById('hsvS').addEventListener('input', updateFromHsv);
@@ -302,3 +403,13 @@ document.getElementById('cmykC').addEventListener('input', updateFromCmyk);
 document.getElementById('cmykM').addEventListener('input', updateFromCmyk);
 document.getElementById('cmykY').addEventListener('input', updateFromCmyk);
 document.getElementById('cmykK').addEventListener('input', updateFromCmyk);
+
+// Adicionar event listeners aos campos de input YIQ
+document.getElementById('yiqY').addEventListener('input', updateFromYiq);
+document.getElementById('yiqI').addEventListener('input', updateFromYiq);
+document.getElementById('yiqQ').addEventListener('input', updateFromYiq);
+
+// Adicionar event listeners aos campos de input XYZ
+document.getElementById('xyzX').addEventListener('input', updateFromXyz);
+document.getElementById('xyzY').addEventListener('input', updateFromXyz);
+document.getElementById('xyzZ').addEventListener('input', updateFromXyz);
